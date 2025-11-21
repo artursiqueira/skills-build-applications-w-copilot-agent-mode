@@ -74,7 +74,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(activities, many=True)
         return Response(serializer.data)
     
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[])
     def leaderboard(self, request):
         """Get leaderboard based on total activity duration"""
         leaderboard_data = Activity.objects.values(
@@ -85,7 +85,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
             activity_count=Count('id')
         ).order_by('-total_duration')[:10]
         
-        return Response(leaderboard_data)
+        return Response(list(leaderboard_data))
 
 
 class WorkoutViewSet(viewsets.ModelViewSet):
