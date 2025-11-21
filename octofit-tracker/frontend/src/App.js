@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css';
 
 // API Configuration
@@ -30,13 +30,6 @@ function App() {
           <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/" />} />
           <Route path="/activities" element={user ? <Activities user={user} /> : <Navigate to="/" />} />
           <Route path="/teams" element={user ? <Teams user={user} /> : <Navigate to="/" />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/workouts" element={<Workouts />} />
-        </Routes>
-      </div>
-    </Router>
-  );
-}
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/workouts" element={<Workouts />} />
         </Routes>
