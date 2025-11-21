@@ -1,22 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import './App.css';
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    // Initialize user from localStorage if available
+    const savedUser = localStorage.getItem('octofit_user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  // Save user to localStorage whenever it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('octofit_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('octofit_user');
+    }
+  }, [user]);
 
   return (
     <Router>
       <div className="App">
         <Navbar user={user} setUser={setUser} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home setUser={setUser} />} />
           <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/" />} />
           <Route path="/activities" element={user ? <Activities user={user} /> : <Navigate to="/" />} />
           <Route path="/teams" element={user ? <Teams user={user} /> : <Navigate to="/" />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/workouts" element={<Workouts />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/workouts" element={<Workouts />} />
         </Routes>
@@ -81,13 +101,19 @@ function Navbar({ user, setUser }) {
   );
 }
 
-function Home() {
+function Home({ setUser }) {
   const [username, setUsername] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Simple mock login for demo purposes
-    window.location.href = '/dashboard';
+    if (username.trim()) {
+      // Simple mock login for demo purposes
+      setUser({ username: username.trim() });
+      // Use a slight delay to ensure state is updated
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 100);
+    }
   };
 
   return (
