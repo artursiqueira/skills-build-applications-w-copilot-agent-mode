@@ -4,8 +4,8 @@
 # To make this agent available, merge this file into the default repository branch.
 # For format details, see: https://gh.io/customagents/config
 
-name:
-description:
+name: Artur Agent
+description: A GitHub Copilot agent specialized in building fitness tracking applications with goal setting, progress monitoring, and workout planning capabilities
 ---
 
 # My Agent
